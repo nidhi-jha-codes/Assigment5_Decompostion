@@ -1,0 +1,128 @@
+---
+title: "Assignment5_Decomposition"
+output: html_document
+date: "2023-10-27"
+---
+# Description
+
+The dataset set shows the Retail sales of Beer, Wine, and Liquor Stores from January 2018 to July 2023. The sales are in millions of dollars over the period mentioned above. 
+
+The time series graph of this dataset shows the seasonality in sales every year. The sales values grow over the year, especially during the holiday season. The graph shows the spike highest during the year's end and second highest during the month mid-year i.e., May and July. The graph shows a decline in sales at the beginning of the year.
+
+Looking at the time series data it can also be inferred that there has been a visible increasing trend.
+Sales growth has been shown over the last 5 years. It has increased from 2018 to 2023.
+
+```{r}
+library(fpp)
+library(fpp2)
+
+library(readxl)
+MyDf=read_excel("TimeSeriesData_LiquourSales.xls")
+
+# Change column names to readable form
+colnames(MyDf) <- c("Date", "Sales")
+
+View(MyDf)
+
+# Change date format from POSIXct to Date.
+MyDf$Date <- as.Date(MyDf$Date)
+```
+
+## Converting Data into timeseries
+```{r}
+Tsales <- ts(MyDf$Sales, start = c(2018,1), end = c(2023,7), frequency = 12)
+```
+
+```{r}
+Tsales_decomp <- stl(Tsales,s.window ="periodic")
+plot(Tsales_decomp)
+attributes(Tsales_decomp)
+
+```
+
+## Plot the seasonal component
+
+```{r}
+plot(Tsales_decomp$time.series[, "seasonal"], main="Seasonal Component")
+```
+
+## Plot the trend component
+```{r}
+plot(Tsales_decomp$time.series[, "trend"], main="Trend Component")
+```
+
+## Plot the remainder component
+```{r}
+plot(Tsales_decomp$time.series[, "remainder"], main="Remainder (Residual) Component")
+```
+
+## Print seasonal adjustment
+```{r}
+DecomTsale<-seasadj(Tsales_decomp)
+
+# Plot a line on the graph
+plot(Tsales)
+lines(DecomTsale, col="red")
+
+```
+
+## Default period forecast
+
+```{r}
+f_stl <- forecast(Tsales_decomp)
+plot(f_stl)
+```
+
+## forecast using period timestamp
+```{r}
+f_stl <- forecast(Tsales_decomp,h=40)
+f_stl
+plot(f_stl)
+```
+
+
+# Another way for Decompostion
+
+```{r}
+decomp_sales <- decompose(Tsales)
+plot(decomp_sales)
+```
+
+## Forecast just the seasonality
+
+```{r}
+decomp_sales$seasonal
+sea<-forecast(decomp_sales$seasonal)
+plot(sea)
+```
+
+## Forecast random 
+
+```{r}
+decomp_sales$random
+ran<-forecast(decomp_sales$random)
+plot(ran)
+```
+
+## Forecast the trend
+
+```{r}
+decomp_sales$trend
+trd<-forecast(decomp_sales$trend)
+plot(trd)
+```
+
+#### By subtracting the seasonal component from the original time series we can obtain a seasonally adjusted time series as shown in this plot here
+
+## Doing Seasonal Adjustment
+```{r}
+seasadj <- Tsales-decomp_sales$seasonal
+ plot(seasadj)  
+```
+
+## Each one shows different attributes 
+```{r}
+attributes(decomp_sales)
+seasadj(decomp_sales)
+```
+

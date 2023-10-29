@@ -3,7 +3,7 @@ title: "Assignment5_Decomposition"
 output: html_document
 date: "2023-10-27"
 ---
-# Description
+## Description
 
 The dataset set shows the Retail sales of Beer, Wine, and Liquor Stores from January 2018 to July 2023. The sales are in millions of dollars over the period mentioned above. 
 
@@ -33,6 +33,7 @@ MyDf$Date <- as.Date(MyDf$Date)
 Tsales <- ts(MyDf$Sales, start = c(2018,1), end = c(2023,7), frequency = 12)
 ```
 
+## Seasonal Decomposition of Time Series by Loess
 ```{r}
 Tsales_decomp <- stl(Tsales,s.window ="periodic")
 plot(Tsales_decomp)
@@ -56,11 +57,12 @@ plot(Tsales_decomp$time.series[, "trend"], main="Trend Component")
 plot(Tsales_decomp$time.series[, "remainder"], main="Remainder (Residual) Component")
 ```
 
-## Print seasonal adjustment
+## Plot seasonal adjustment
 ```{r}
 DecomTsale<-seasadj(Tsales_decomp)
 
 # Plot a line on the graph
+
 plot(Tsales)
 lines(DecomTsale, col="red")
 
@@ -73,7 +75,7 @@ f_stl <- forecast(Tsales_decomp)
 plot(f_stl)
 ```
 
-## forecast using period timestamp
+## Forecast using period timestamp
 ```{r}
 f_stl <- forecast(Tsales_decomp,h=40)
 f_stl

@@ -48,16 +48,19 @@ plot(Tsales_decomp$time.series[, "seasonal"], main="Seasonal Component")
 ```
 
 ## Plot the trend component
+
 ```{r}
 plot(Tsales_decomp$time.series[, "trend"], main="Trend Component")
 ```
 
 ## Plot the remainder component
+
 ```{r}
 plot(Tsales_decomp$time.series[, "remainder"], main="Remainder (Residual) Component")
 ```
 
 ## Plot seasonal adjustment
+
 ```{r}
 DecomTsale<-seasadj(Tsales_decomp)
 plot(DecomTsale)
@@ -77,30 +80,34 @@ plot(f_stl_forecast)
 ```
 
 ## Forecast using period timestamp
+
 ```{r}
 f_stl_timestamp <- forecast(Tsales_decomp,h=40)
 plot(f_stl_timestamp)
 ```
 
 ## Forecasting the Seasonally Adjusted Decomposed Time Series
+
 ```{r}
 DecomTsale_forecast <- forecast(DecomTsale, h=40)
 plot(DecomTsale_forecast)
 ```
-```
 
-# Another way for Decompostion using Decompose function
+
+## Another way for Decompostion using Decompose function
 
 ```{r}
 decomp_sales <- decompose(Tsales)
 plot(decomp_sales)
 ```
+
 # Seasonal Adjustment
 
 ```{r}
 Decomp_sales_seaAJ = seasadj(decomp_sales)
 plot(Decomp_sales_seaAJ)
 ```
+
 ## Plotting Line Seasonally Adjusted Decomposed TS with the original Time Series
 
 ```{r}
@@ -148,7 +155,7 @@ seasadj <- Tsales-decomp_sales$seasonal
  plot(seasadj)  
 ```
 
-## Each one shows different attributes 
+### Each one shows different attributes 
 ```{r}
 attributes(decomp_sales)
 seasadj(decomp_sales)

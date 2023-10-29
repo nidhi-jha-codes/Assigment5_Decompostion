@@ -60,6 +60,7 @@ plot(Tsales_decomp$time.series[, "remainder"], main="Remainder (Residual) Compon
 ## Plot seasonal adjustment
 ```{r}
 DecomTsale<-seasadj(Tsales_decomp)
+plot(DecomTsale)
 
 # Plot a line on the graph
 
@@ -71,23 +72,48 @@ lines(DecomTsale, col="red")
 ## Default period forecast
 
 ```{r}
-f_stl <- forecast(Tsales_decomp)
-plot(f_stl)
+f_stl_forecast <- forecast(Tsales_decomp)
+plot(f_stl_forecast)
 ```
 
 ## Forecast using period timestamp
 ```{r}
-f_stl <- forecast(Tsales_decomp,h=40)
-f_stl
-plot(f_stl)
+f_stl_timestamp <- forecast(Tsales_decomp,h=40)
+plot(f_stl_timestamp)
 ```
 
+## Forecasting the Seasonally Adjusted Decomposed Time Series
+```{r}
+DecomTsale_forecast <- forecast(DecomTsale, h=40)
+plot(DecomTsale_forecast)
+```
+```
 
-# Another way for Decompostion
+# Another way for Decompostion using Decompose function
 
 ```{r}
 decomp_sales <- decompose(Tsales)
 plot(decomp_sales)
+```
+# Seasonal Adjustment
+
+```{r}
+Decomp_sales_seaAJ = seasadj(decomp_sales)
+plot(Decomp_sales_seaAJ)
+```
+## Plotting Line Seasonally Adjusted Decomposed TS with the original Time Series
+
+```{r}
+plot(Tsales)
+lines(Decomp_sales_seaAJ, col="red")
+```
+
+## Forecasting the Seasonally Adjusted Decomposed Time Series
+
+```{r}
+T_sales_decompose_seasadj_forecast <- forecast(Decomp_sales_seaAJ, h=40)
+plot(T_sales_decompose_seasadj_forecast)
+
 ```
 
 ## Forecast just the seasonality
